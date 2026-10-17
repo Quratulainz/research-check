@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  email               String    @unique
+  passwordHash        String
+  isVerified          Boolean   @default(false)
+  verificationCode    String?
+  verificationExpires DateTime?
+  isSubscribed        Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+}
+
+model Submission {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  ownerEmail      String
+  journal         String
+  status          String   @default("SUBMITTED")
+  manuscriptId    String?  @unique
+  trackingUrl     String?
+  notes           String?
+  source          String   @default("USER_PROVIDED")
+  submittedAt     DateTime @default(now())
+  statusUpdatedAt DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([ownerEmail])
+  @@index([status])
+  @@index([journal])
+}

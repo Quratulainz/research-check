@@ -1,0 +1,19 @@
+// Copy this model into your existing prisma/schema.prisma. Do not replace the file.
+model Submission {
+  id              String   @id @default(cuid())
+  title           String
+  ownerEmail      String
+  journal         String
+  status          String   @default("SUBMITTED")
+  manuscriptId    String?  @unique
+  trackingUrl     String?
+  notes           String?
+  source          String   @default("USER_PROVIDED")
+  submittedAt     DateTime @default(now())
+  statusUpdatedAt DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  @@index([ownerEmail])
+  @@index([status])
+  @@index([journal])
+}
